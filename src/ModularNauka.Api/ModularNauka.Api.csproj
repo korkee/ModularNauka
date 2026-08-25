@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ModularNauka.Shared\ModularNauka.Shared.csproj" />
+    <ProjectReference Include="..\Modules\Users\ModularNauka.Users\ModularNauka.Users.csproj" />
+    <ProjectReference Include="..\Modules\Courses\ModularNauka.Courses\ModularNauka.Courses.csproj" />
+    <ProjectReference Include="..\Modules\Quiz\ModularNauka.Quiz\ModularNauka.Quiz.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
