@@ -1,34 +1,36 @@
+using ModularNauka.Courses;
+using ModularNauka.Quiz;
+using ModularNauka.Shared.Events;
+using ModularNauka.Users;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddControllers();
+
+// Event Bus — jeden singleton dla ca³ej aplikacji
+builder.Services.AddSingleton<IEventBus, InMemoryEventBus>();
+
+// Rejestracja modu³ów
+builder.Services.AddUsersModule();
+builder.Services.AddCoursesModule();
+builder.Services.AddQuizModule();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
+// Tworzenie tabel w bazach danych przy starcie
+using (var scope = app.Services.CreateScope())
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var sp = scope.ServiceProvider;
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
+    sp.GetRequiredService<ModularNauka.Users.Infrastructure.UsersDbContext>().Database.EnsureCreated();
+    sp.GetRequiredService<ModularNauka.Courses.Infrastructure.CoursesDbContext>().Database.EnsureCreated();
+    sp.GetRequiredService<ModularNauka.Quiz.Infrastructure.QuizDbContext>().Database.EnsureCreated();
 
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    // Rejestracja handlerów eventów
+    var eventBus = sp.GetRequiredService<IEventBus>();
+    eventBus.RegisterUsersHandlers(sp);
+    eventBus.RegisterCoursesHandlers(sp);
 }
+
+app.MapControllers();
+app.Run();
