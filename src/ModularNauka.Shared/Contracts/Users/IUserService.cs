@@ -1,7 +1,7 @@
 namespace ModularNauka.Shared.Contracts.Users;
 
-// Publiczne API modułu Users — inne moduły używają tego interfejsu zamiast
-// bezpośredniego odwołania do implementacji.
+// Public API of the Users module — other modules depend on this interface
+// instead of referencing the implementation directly.
 public interface IUserService
 {
     Task<UserDto?> GetByIdAsync(Guid userId, CancellationToken ct = default);

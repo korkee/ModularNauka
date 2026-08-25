@@ -1,6 +1,6 @@
 namespace ModularNauka.Shared.Contracts.Courses;
 
-// Publiczne API modułu Courses — Quiz używa tego do weryfikacji czy lekcja istnieje.
+// Public API of the Courses module — used by Quiz to verify lesson existence.
 public interface ICourseService
 {
     Task<LessonDto?> GetLessonByIdAsync(Guid lessonId, CancellationToken ct = default);

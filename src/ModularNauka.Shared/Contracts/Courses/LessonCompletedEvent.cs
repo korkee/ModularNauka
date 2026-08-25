@@ -2,8 +2,8 @@ using ModularNauka.Shared.Events;
 
 namespace ModularNauka.Shared.Contracts.Courses;
 
-// Emitowany przez moduł Courses gdy lekcja zostaje ukończona.
-// Obsługiwany przez moduł Users → aktualizuje postęp użytkownika.
+// Emitted by the Courses module when a lesson is completed.
+// Handled by the Users module → updates user progress.
 public sealed record LessonCompletedEvent(
     Guid UserId,
     Guid LessonId,

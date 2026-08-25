@@ -2,8 +2,8 @@ using ModularNauka.Shared.Events;
 
 namespace ModularNauka.Shared.Contracts.Quiz;
 
-// Emitowany przez moduł Quiz gdy użytkownik ukończy quiz.
-// Obsługiwany przez moduł Courses → oznacza lekcję jako ukończoną.
+// Emitted by the Quiz module when a user completes a quiz.
+// Handled by the Courses module → marks the lesson as completed.
 public sealed record QuizSubmittedEvent(
     Guid UserId,
     Guid LessonId,

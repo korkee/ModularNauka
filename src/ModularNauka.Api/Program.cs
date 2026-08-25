@@ -1,3 +1,4 @@
+using ModularNauka.Api.Middleware;
 using ModularNauka.Courses;
 using ModularNauka.Quiz;
 using ModularNauka.Shared.Events;
@@ -28,12 +29,13 @@ using (var scope = app.Services.CreateScope())
     sp.GetRequiredService<ModularNauka.Courses.Infrastructure.CoursesDbContext>().Database.EnsureCreated();
     sp.GetRequiredService<ModularNauka.Quiz.Infrastructure.QuizDbContext>().Database.EnsureCreated();
 
-    // Rejestracja handlerów eventów
+    // Register event handlers
     var eventBus = sp.GetRequiredService<IEventBus>();
     eventBus.RegisterUsersHandlers();
     eventBus.RegisterCoursesHandlers();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
 

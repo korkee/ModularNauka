@@ -8,6 +8,9 @@ obj/
 *.sln.docstates
 project.lock.json
 project.fragment.lock.json
+*.nupkg
+*.snupkg
+TestResults/
 
 ## SQLite
 *.db
@@ -18,10 +21,24 @@ project.fragment.lock.json
 *.log
 logs/
 
+## Environment / secrets
+.env
+.env.*
+appsettings.*.json
+!appsettings.Development.json
+
+## Node / Angular
+node_modules/
+dist/
+.angular/
+.cache/
+npm-debug.log*
+
 ## OS
 .DS_Store
 Thumbs.db
 
-## Rider / VS Code
+## IDE
 .idea/
 .vscode/
+*.swp
