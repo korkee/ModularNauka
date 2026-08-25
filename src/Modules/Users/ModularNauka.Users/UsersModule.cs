@@ -22,8 +22,8 @@ public static class UsersModule
         return services;
     }
 
-    public static void RegisterUsersHandlers(this IEventBus eventBus, IServiceProvider sp)
+    public static void RegisterUsersHandlers(this IEventBus eventBus)
     {
-        eventBus.Subscribe<LessonCompletedEvent>(sp.GetRequiredService<LessonCompletedHandler>());
+        eventBus.Subscribe<LessonCompletedEvent>(new LessonCompletedHandler(null!));
     }
 }

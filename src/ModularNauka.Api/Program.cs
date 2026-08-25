@@ -6,11 +6,13 @@ using ModularNauka.Users;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-// Event Bus — jeden singleton dla ca³ej aplikacji
+// Event Bus ï¿½ jeden singleton dla caï¿½ej aplikacji
 builder.Services.AddSingleton<IEventBus, InMemoryEventBus>();
 
-// Rejestracja modu³ów
+// Rejestracja moduï¿½ï¿½w
 builder.Services.AddUsersModule();
 builder.Services.AddCoursesModule();
 builder.Services.AddQuizModule();
@@ -26,11 +28,14 @@ using (var scope = app.Services.CreateScope())
     sp.GetRequiredService<ModularNauka.Courses.Infrastructure.CoursesDbContext>().Database.EnsureCreated();
     sp.GetRequiredService<ModularNauka.Quiz.Infrastructure.QuizDbContext>().Database.EnsureCreated();
 
-    // Rejestracja handlerów eventów
+    // Rejestracja handlerÃ³w eventÃ³w
     var eventBus = sp.GetRequiredService<IEventBus>();
-    eventBus.RegisterUsersHandlers(sp);
-    eventBus.RegisterCoursesHandlers(sp);
+    eventBus.RegisterUsersHandlers();
+    eventBus.RegisterCoursesHandlers();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapControllers();
 app.Run();

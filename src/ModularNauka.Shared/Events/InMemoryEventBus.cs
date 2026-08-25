@@ -1,30 +1,38 @@
+using Microsoft.Extensions.DependencyInjection;
+
 namespace ModularNauka.Shared.Events;
 
-// Prosty event bus działający w pamięci procesu — idealny dla monolitu.
-// Handlery rejestruje się raz przy starcie aplikacji (w Program.cs).
 public sealed class InMemoryEventBus : IEventBus
 {
-    private readonly Dictionary<Type, List<object>> _handlers = new();
+    private readonly Dictionary<Type, List<Type>> _handlerTypes = new();
+    private readonly IServiceScopeFactory _scopeFactory;
+
+    public InMemoryEventBus(IServiceScopeFactory scopeFactory)
+    {
+        _scopeFactory = scopeFactory;
+    }
 
     public void Subscribe<TEvent>(IEventHandler<TEvent> handler) where TEvent : IEvent
     {
-        var type = typeof(TEvent);
-        if (!_handlers.TryGetValue(type, out var list))
+        var eventType = typeof(TEvent);
+        if (!_handlerTypes.TryGetValue(eventType, out var list))
         {
-            list = new List<object>();
-            _handlers[type] = list;
+            list = new List<Type>();
+            _handlerTypes[eventType] = list;
         }
-        list.Add(handler);
+        list.Add(handler.GetType());
     }
 
     public async Task PublishAsync<TEvent>(TEvent @event, CancellationToken ct = default) where TEvent : IEvent
     {
-        if (!_handlers.TryGetValue(typeof(TEvent), out var handlers))
+        if (!_handlerTypes.TryGetValue(typeof(TEvent), out var handlerTypes))
             return;
 
-        foreach (var handler in handlers)
+        using var scope = _scopeFactory.CreateScope();
+        foreach (var handlerType in handlerTypes)
         {
-            await ((IEventHandler<TEvent>)handler).HandleAsync(@event, ct);
+            var handler = (IEventHandler<TEvent>)scope.ServiceProvider.GetRequiredService(handlerType);
+            await handler.HandleAsync(@event, ct);
         }
     }
 }

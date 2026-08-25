@@ -22,8 +22,8 @@ public static class CoursesModule
         return services;
     }
 
-    public static void RegisterCoursesHandlers(this IEventBus eventBus, IServiceProvider sp)
+    public static void RegisterCoursesHandlers(this IEventBus eventBus)
     {
-        eventBus.Subscribe<QuizSubmittedEvent>(sp.GetRequiredService<QuizSubmittedHandler>());
+        eventBus.Subscribe<QuizSubmittedEvent>(new QuizSubmittedHandler(null!));
     }
 }

@@ -7,6 +7,10 @@
     <ProjectReference Include="..\Modules\Quiz\ModularNauka.Quiz\ModularNauka.Quiz.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
