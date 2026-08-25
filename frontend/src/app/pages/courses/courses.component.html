@@ -1,0 +1,24 @@
+<div class="header">
+  <h2>ModularNauka</h2>
+  <span>Hello, {{ userName }} &nbsp;<button class="link-btn" (click)="logout()">Logout</button></span>
+</div>
+
+<div class="layout">
+  <div class="panel">
+    <h3>Courses</h3>
+    <div *ngFor="let course of courses" class="item" [class.active]="selectedCourse?.id === course.id" (click)="selectCourse(course)">
+      <strong>{{ course.title }}</strong>
+      <p>{{ course.description }}</p>
+    </div>
+    <p *ngIf="courses.length === 0" class="empty">No courses yet.</p>
+  </div>
+
+  <div class="panel" *ngIf="selectedCourse">
+    <h3>{{ selectedCourse.title }} — Lessons</h3>
+    <div *ngFor="let lesson of lessons" class="item lesson-item" (click)="openLesson(lesson)">
+      <span class="badge" [class.done]="lesson.isCompleted">{{ lesson.isCompleted ? '✓' : lesson.order }}</span>
+      {{ lesson.title }}
+    </div>
+    <p *ngIf="lessons.length === 0" class="empty">No lessons in this course.</p>
+  </div>
+</div>

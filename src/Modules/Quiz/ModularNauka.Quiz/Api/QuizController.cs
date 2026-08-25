@@ -40,6 +40,13 @@ public class QuizController : ControllerBase
         });
     }
 
+    [HttpGet("{quizId:guid}/questions")]
+    public async Task<IActionResult> GetQuestions(Guid quizId, CancellationToken ct)
+    {
+        var questions = await _quizService.GetQuestionsAsync(quizId, ct);
+        return Ok(questions);
+    }
+
     [HttpGet("lesson/{lessonId:guid}")]
     public async Task<IActionResult> GetByLesson(Guid lessonId, CancellationToken ct)
     {

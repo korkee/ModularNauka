@@ -9,6 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(o =>
+    o.AddDefaultPolicy(p => p
+        .WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()));
 
 // Event Bus � jeden singleton dla ca�ej aplikacji
 builder.Services.AddSingleton<IEventBus, InMemoryEventBus>();
@@ -36,6 +41,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors();
 app.UseSwagger();
 app.UseSwaggerUI();
 

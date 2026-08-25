@@ -53,7 +53,23 @@ public class QuizService
     {
         return await _db.Quizzes.Where(q => q.LessonId == lessonId).ToListAsync(ct);
     }
+
+    public async Task<List<QuestionDto>> GetQuestionsAsync(Guid quizId, CancellationToken ct = default)
+    {
+        return await _db.Questions
+            .Where(q => q.QuizId == quizId)
+            .Select(q => new QuestionDto(q.Id, q.Text, q.Options))
+            .ToListAsync(ct);
+    }
 }
+
+public record SubmitResult(int Correct, int Total)
+{
+    public double ScorePercent => Total == 0 ? 0 : Math.Round((double)Correct / Total * 100, 1);
+}
+
+// CorrectAnswer intentionally excluded — never sent to the client
+public record QuestionDto(Guid Id, string Text, List<string> Options);
 
 public record SubmitResult(int Correct, int Total)
 {

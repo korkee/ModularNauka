@@ -1,0 +1,34 @@
+<div class="header">
+  <button class="link-btn" (click)="back()">← Back to courses</button>
+  <h2 *ngIf="quiz">{{ quiz.title }}</h2>
+</div>
+
+<div *ngIf="loading" class="empty">Loading...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div *ngIf="!loading && !error">
+  <div *ngFor="let q of questions; let i = index" class="card question-card">
+    <p><strong>{{ i + 1 }}. {{ q.text }}</strong></p>
+    <div *ngFor="let opt of q.options" class="option"
+         [class.selected]="answers[q.id] === opt"
+         [class.disabled]="!!result"
+         (click)="select(q.id, opt)">
+      {{ opt }}
+    </div>
+  </div>
+
+  <div *ngIf="!result && questions.length > 0" class="actions">
+    <button (click)="submit()" [disabled]="answeredCount() < questions.length">
+      Submit Answers
+    </button>
+    <small *ngIf="answeredCount() < questions.length">
+      Answer all {{ questions.length }} question(s) to submit.
+    </small>
+  </div>
+
+  <div *ngIf="result" class="result-box" [class.pass]="result.scorePercent >= 50">
+    <h3>{{ result.scorePercent >= 50 ? '🎉 Passed!' : '😕 Try again' }}</h3>
+    <p>Score: <strong>{{ result.correct }} / {{ result.total }}</strong> ({{ result.scorePercent }}%)</p>
+    <button (click)="back()">Back to courses</button>
+  </div>
+</div>
