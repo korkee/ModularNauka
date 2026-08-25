@@ -5,7 +5,11 @@
   </Folder>
   <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/Courses/">
+    <File Path="CoursesModule.cs" />
     <Project Path="src/Modules/Courses/ModularNauka.Courses/ModularNauka.Courses.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Courses/Api/">
+    <File Path="CoursesController.cs" />
   </Folder>
   <Folder Name="/src/Modules/Quiz/">
     <Project Path="src/Modules/Quiz/ModularNauka.Quiz/ModularNauka.Quiz.csproj" />
