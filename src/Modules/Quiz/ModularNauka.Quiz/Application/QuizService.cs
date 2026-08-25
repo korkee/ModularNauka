@@ -70,8 +70,3 @@ public record SubmitResult(int Correct, int Total)
 
 // CorrectAnswer intentionally excluded — never sent to the client
 public record QuestionDto(Guid Id, string Text, List<string> Options);
-
-public record SubmitResult(int Correct, int Total)
-{
-    public double ScorePercent => Total == 0 ? 0 : Math.Round((double)Correct / Total * 100, 1);
-}
